@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="me.jaeyeol.bank.dao2.AcctDAO2Impl">
+	
+	<resultMap type="me.jaeyeol.bank.dto.AcctDTO" id="acctDto">
+		<result property="acctNo" column="ACCT_NO" /> 
+		<result property="acctPw" column="ACCT_PW" /> 
+		<result property="acctBal" column="ACCT_BAL" /> 
+	</resultMap>
+	
+	<select id="sltOneAcct" resultMap="acctDto"> 
+		SELECT * FROM ACCT2 WHERE ACCT_NO = #{acctNo}
+	</select>
+	
+	<update id="updateBalance"> 
+		UPDATE ACCT2
+		SET ACCT_BAL = #{acctBal} 
+		WHERE ACCT_NO = #{acctNo} 
+	</update>
+	
+</mapper>

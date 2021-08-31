@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="me.jaeyeol.bank.dao1.HistDAO1Impl">
+
+	<resultMap type="me.jaeyeol.bank.dto.HistDTO" id="hist">
+		
+		<result property="dealNo" column="Deal_INFO_NO" /> 
+		<result property="sendAcct" column="SEND_ACCT" />
+		<result property="dealType" column="DEAL_TYPE" />
+		<result property="recvAcct" column="RECV_ACCT" />
+		<result property="dealDate" column="DEAL_DATE" />
+		<result property="amount" column="DEAL_AMT" />
+		<result property="balance" column="ACCT_BAL" />
+	
+	</resultMap>
+
+	<select id="sltMulti" resultMap="hist"> 
+		<![CDATA[
+		SELECT *
+		FROM ( SELECT O.*
+					  , ROWNUM RNUM
+					  FROM ( SELECT *
+					  		  FROM   HISTORY
+					  		  WHERE  SEND_ACCT = #{value} OR RECV_ACCT = #{value}
+					  		  ORDER BY DEAL_NO DESC
+					  		  ) O
+			  )
+		WHERE RNUM >= #{start}
+		AND ROWNUM <= #{cnt}
+		]]>
+	</select>
+	
+	<insert id="histInsert"> 
+		INSERT INTO HISTORY
+		VALUES (#{dealNo},#{sendAcct},#{dealType},#{recvAcct},#{dealDate},#{amount},#{balance})
+	</insert>
+	
+	<select id="getSerialNo" resultType="int"> 
+		SELECT NVL(MAX(DEAL_NO)+1,0) FROM HISTORY
+	</select>
+	
+</mapper>
